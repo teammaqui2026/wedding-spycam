@@ -441,9 +441,17 @@
         if (post.mediaType === 'photo' && post.mediaUrl) {
           mediaHtml = `<img src="${post.mediaUrl}" class="w-full h-80 object-cover" loading="lazy" />`;
         } else if (post.mediaType === 'audio' && post.mediaUrl) {
+          // Extract file ID if a URL was stored, or use directly
+          const fileId = post.mediaUrl.includes('id=') 
+            ? post.mediaUrl.split('id=')[1] 
+            : post.mediaUrl;
+
           mediaHtml = `
-            <div class="p-5 bg-beige/60 flex items-center justify-center border-b border-dusty/20">
-              <audio controls class="w-full"><source src="${post.mediaUrl}" type="audio/webm"></audio>
+            <div class="p-6 bg-beige/60 flex flex-col items-center justify-center border-b border-dusty/20 gap-3">
+              <button onclick="playAudioPost('${fileId}', this)" class="px-5 py-2.5 bg-navy text-beige rounded-full text-xs font-semibold shadow hover:bg-navy-light transition active:scale-95 flex items-center gap-2">
+                ▶️ Play Voice Toast
+              </button>
+              <audio controls class="hidden w-full max-w-xs mt-1"></audio>
             </div>`;
         }
 
@@ -509,13 +517,25 @@
       if (!mediaRecorder || mediaRecorder.state === 'inactive') {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
+          
+          // Determine best supported audio MIME type
+          let options = {};
+          if (MediaRecorder.isTypeSupported('audio/webm')) {
+            options = { mimeType: 'audio/webm' };
+          } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+            options = { mimeType: 'audio/mp4' }; // iPhone iOS Safari
+          }
+
+          mediaRecorder = new MediaRecorder(stream, options);
+          mimeType = options.mimeType || 'audio/webm';
           audioChunks = [];
 
-          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+          mediaRecorder.ondataavailable = e => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+          };
+
           mediaRecorder.onstop = () => {
-            const blob = new Blob(audioChunks, { type: 'audio/webm' });
-            mimeType = 'audio/webm';
+            const blob = new Blob(audioChunks, { type: mimeType });
             const audioUrl = URL.createObjectURL(blob);
             const player = document.getElementById('audioPreview');
             player.src = audioUrl;
@@ -527,7 +547,7 @@
           };
 
           mediaRecorder.start();
-          status.innerText = "Recording... tap to finish";
+          status.innerText = "Recording... tap mic to stop";
           btn.classList.add('bg-red-500', 'animate-pulse');
         } catch (err) {
           alert("Microphone permission denied or not supported.");
@@ -536,6 +556,48 @@
         mediaRecorder.stop();
         status.innerText = "Voice message ready!";
         btn.classList.remove('bg-red-500', 'animate-pulse');
+      }
+    }
+
+    async function playAudioPost(audioFileId, btnElem) {
+      const audioTag = btnElem.parentElement.querySelector('audio');
+      if (audioTag.src && audioTag.src.startsWith('blob:')) {
+        if (audioTag.paused) {
+          audioTag.play();
+          btnElem.innerText = "⏸️ Pause";
+        } else {
+          audioTag.pause();
+          btnElem.innerText = "▶️ Play Voice Toast";
+        }
+        return;
+      }
+
+      btnElem.innerText = "⏳ Loading...";
+      try {
+        // Fetch raw audio base64 through our GAS proxy
+        const res = await fetch(`${GAS_ENDPOINT}?audioId=${audioFileId}`);
+        const base64Data = await res.text();
+        
+        // Convert base64 to playable blob
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'audio/webm' });
+        const playableUrl = URL.createObjectURL(blob);
+
+        audioTag.src = playableUrl;
+        audioTag.classList.remove('hidden');
+        audioTag.play();
+        btnElem.innerText = "⏸️ Pause";
+
+        audioTag.onended = () => {
+          btnElem.innerText = "▶️ Play Voice Toast";
+        };
+      } catch (err) {
+        btnElem.innerText = "⚠️ Failed to play";
       }
     }
 
