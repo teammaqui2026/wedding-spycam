@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Sarah & James — Wedding Hub</title>
+  <title id="htmlTitle">Wedding Hub</title>
   <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
@@ -30,7 +30,6 @@
   </script>
 
   <style>
-    /* Smooth view transitions */
     .fade-in {
       animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -47,25 +46,22 @@
   <!-- ========================================== -->
   <section id="view-home" class="relative w-full h-screen max-w-md mx-auto overflow-hidden flex flex-col justify-between p-6 select-none">
     
-    <!-- Hero Image Background with Elegant Gradient Overlay -->
-    <div class="absolute inset-0 z-0">
-      <!-- REPLACE THE IMAGE URL BELOW WITH YOUR OWN PHOTO -->
+    <!-- Hero Image Background with Gradient Overlay -->
+    <div class="absolute inset-0 z-0 bg-navy">
       <img id="heroImage" 
            src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" 
-           alt="Sarah & James" 
-           class="w-full h-full object-cover object-center filter brightness-[0.92]" />
-      
-      <!-- Top and Bottom Vignette Overlays for readability -->
-      <div class="absolute inset-0 bg-gradient-to-b from-navy/70 via-transparent to-navy/85"></div>
+           alt="Hero Image" 
+           class="w-full h-full object-cover object-center filter brightness-[0.88] transition-opacity duration-700 opacity-90" />
+      <div class="absolute inset-0 bg-gradient-to-b from-navy/70 via-transparent to-navy/90"></div>
     </div>
 
-    <!-- Top Text on Hero -->
+    <!-- Top Text on Hero (Dynamic from Sheet) -->
     <div class="relative z-10 pt-8 text-center text-beige">
-      <p class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-dusty font-medium mb-1 drop-shadow">The Wedding Celebration of</p>
-      <h1 class="text-5xl md:text-6xl font-serif italic tracking-wide text-white drop-shadow-md">Sarah & James</h1>
+      <p id="heroTagline" class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-dusty font-medium mb-1 drop-shadow">The Wedding Celebration of</p>
+      <h1 id="heroNames" class="text-5xl md:text-6xl font-serif italic tracking-wide text-white drop-shadow-md">Sarah & James</h1>
       <div class="flex items-center justify-center gap-2 mt-2">
         <span class="h-[1px] w-6 bg-dusty/60"></span>
-        <p class="text-[11px] uppercase tracking-[0.25em] text-beige/90 font-light">October 24, 2026</p>
+        <p id="heroDate" class="text-[11px] uppercase tracking-[0.25em] text-beige/90 font-light">October 24, 2026</p>
         <span class="h-[1px] w-6 bg-dusty/60"></span>
       </div>
     </div>
@@ -76,13 +72,11 @@
         Tap to explore our day
       </p>
 
-      <!-- Transparent Buttons Container -->
       <div class="flex items-center justify-around px-2">
         
         <!-- Button 1: Spy Cam (Capture) -->
         <button onclick="navigateTo('upload')" class="group flex flex-col items-center focus:outline-none transition transform active:scale-95">
           <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-[2px]">
-            <!-- Camera / Spy Icon -->
             <svg class="w-6 h-6 text-white group-hover:text-dusty transition duration-200" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
@@ -94,7 +88,6 @@
         <!-- Button 2: Moments Feed -->
         <button onclick="navigateTo('feed')" class="group flex flex-col items-center focus:outline-none transition transform active:scale-95">
           <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-[2px]">
-            <!-- Gallery / Feed Icon -->
             <svg class="w-6 h-6 text-white group-hover:text-dusty transition duration-200" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
             </svg>
@@ -105,7 +98,6 @@
         <!-- Button 3: Itinerary & Maps -->
         <button onclick="navigateTo('details')" class="group flex flex-col items-center focus:outline-none transition transform active:scale-95">
           <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-[2px]">
-            <!-- Map & Time Icon -->
             <svg class="w-6 h-6 text-white group-hover:text-dusty transition duration-200" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
@@ -132,7 +124,7 @@
         Home
       </button>
       <h2 id="topBarTitle" class="text-sm font-serif italic text-white tracking-wide">Live Feed</h2>
-      <div class="w-12"></div> <!-- Spacer for optical centering -->
+      <div class="w-12"></div>
     </header>
 
     <main class="max-w-md mx-auto p-4">
@@ -164,26 +156,23 @@
             <input type="text" id="guestName" required placeholder="e.g. Aunt Rachel" class="w-full text-xs p-3.5 bg-beige/60 border border-dusty/40 rounded-xl focus:outline-none focus:border-navy">
           </div>
 
-          <!-- Switcher -->
           <div class="grid grid-cols-2 gap-2 p-1 bg-beige rounded-xl border border-dusty/30">
             <button type="button" onclick="setMediaType('photo')" id="btnPhotoTab" class="py-2.5 text-xs font-semibold rounded-lg bg-navy text-white transition-all">Photo Snap</button>
             <button type="button" onclick="setMediaType('audio')" id="btnAudioTab" class="py-2.5 text-xs font-semibold rounded-lg bg-transparent text-navy hover:text-dusty-dark transition-all">Voice Note</button>
           </div>
 
-          <!-- Photo Input -->
           <div id="photoInputGroup" class="space-y-3">
             <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="previewImage(event)">
             <div onclick="document.getElementById('photoInput').click()" class="cursor-pointer border-2 border-dashed border-dusty rounded-2xl p-7 text-center bg-beige/30 hover:bg-beige/60 transition">
               <svg class="mx-auto h-8 w-8 text-dusty-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
               </svg>
               <span class="mt-2 block text-xs font-medium text-navy">Take a live photo or upload from library</span>
             </div>
             <img id="imagePreview" class="hidden w-full h-52 object-cover rounded-2xl border border-dusty/40" />
           </div>
 
-          <!-- Audio Input -->
           <div id="audioInputGroup" class="hidden text-center space-y-3 p-5 bg-beige/40 rounded-2xl border border-dusty/30">
             <p class="text-xs text-gray-500">Record a heartfelt wish or toast</p>
             <div class="flex justify-center items-center gap-3">
@@ -213,47 +202,8 @@
           <p class="text-xs text-dusty-dark font-light mt-0.5">Call times and directions to our special places</p>
         </div>
 
-        <!-- Hotel Prep -->
-        <div class="bg-cardBg p-5 rounded-3xl shadow-sm border-l-4 border-dusty">
-          <div class="flex justify-between items-center">
-            <span class="text-[10px] bg-beige text-navy px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">Hotel Prep</span>
-            <span class="text-xs font-semibold text-dusty-dark">09:00 AM</span>
-          </div>
-          <h3 class="text-xl font-serif mt-2 text-navy">The Heritage Hotel Manila</h3>
-          <p class="text-xs text-gray-500 mt-0.5">Bridal Suite Room 402 & Groom Suite Room 405</p>
-          <p class="text-xs text-dusty-dark font-medium mt-1.5">Entourage Call Time: 10:00 AM</p>
-          <a href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-dusty-dark hover:underline">
-            📍 Open in Google Maps &rarr;
-          </a>
-        </div>
-
-        <!-- Ceremony -->
-        <div class="bg-cardBg p-5 rounded-3xl shadow-sm border-l-4 border-navy">
-          <div class="flex justify-between items-center">
-            <span class="text-[10px] bg-navy text-beige px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">Ceremony</span>
-            <span class="text-xs font-semibold text-navy">02:30 PM</span>
-          </div>
-          <h3 class="text-xl font-serif mt-2 text-navy">St. Andrew Cathedral</h3>
-          <p class="text-xs text-gray-500 mt-0.5">Quirino Ave, Parañaque, Metro Manila</p>
-          <p class="text-xs text-navy font-medium mt-1.5">Guest Arrival: 02:00 PM | Processional: 02:30 PM</p>
-          <a href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-navy hover:underline">
-            📍 Open in Google Maps &rarr;
-          </a>
-        </div>
-
-        <!-- Reception -->
-        <div class="bg-cardBg p-5 rounded-3xl shadow-sm border-l-4 border-dusty">
-          <div class="flex justify-between items-center">
-            <span class="text-[10px] bg-beige text-navy px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">Reception</span>
-            <span class="text-xs font-semibold text-dusty-dark">05:30 PM</span>
-          </div>
-          <h3 class="text-xl font-serif mt-2 text-navy">Palacio de Maynila</h3>
-          <p class="text-xs text-gray-500 mt-0.5">1809 Roxas Blvd, Malate, Manila</p>
-          <p class="text-xs text-dusty-dark font-medium mt-1.5">Cocktails: 05:30 PM | Dinner: 06:30 PM</p>
-          <a href="https://maps.google.com" target="_blank" class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-dusty-dark hover:underline">
-            📍 Open in Google Maps &rarr;
-          </a>
-        </div>
+        <!-- Dynamic Venues Container (Populated from Google Sheet) -->
+        <div id="venuesContainer" class="space-y-4"></div>
       </section>
 
     </main>
@@ -276,15 +226,79 @@
   </div>
 
   <script>
-    // --- GOOGLE APPS SCRIPT URL ---
-    // (Paste your deployed Web App URL below)
-    const GAS_ENDPOINT = "PASTE_YOUR_GAS_WEB_APP_URL_HERE";
+    // --- YOUR GOOGLE APPS SCRIPT URL ---
+    const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbxbNFL68EWM-hasknUUediMIbb0_T_Dx8mDe1aouWX-BuCFNcDv-gbENZMaESaSw6eTnQ/exec";
 
     let currentMediaType = 'photo';
     let base64Media = null;
     let mimeType = null;
     let mediaRecorder = null;
     let audioChunks = [];
+
+    // Helper: Formats Google Drive sharing links to direct thumbnail URLs
+    function formatDriveUrl(url) {
+      if (!url) return '';
+      const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+      }
+      return url;
+    }
+
+    // Load CMS Data & Feed
+    async function loadData() {
+      try {
+        const res = await fetch(GAS_ENDPOINT);
+        const data = await res.json();
+
+        // 1. Apply Settings (Hero Image, Names, Date)
+        if (data.settings) {
+          const s = data.settings;
+          if (s.couple_names) {
+            document.getElementById('heroNames').innerText = s.couple_names;
+            document.getElementById('htmlTitle').innerText = `${s.couple_names} — Wedding Hub`;
+          }
+          if (s.wedding_date) document.getElementById('heroDate').innerText = s.wedding_date;
+          if (s.tagline) document.getElementById('heroTagline').innerText = s.tagline;
+          if (s.hero_image_url) {
+            const formattedUrl = formatDriveUrl(s.hero_image_url);
+            document.getElementById('heroImage').src = formattedUrl;
+          }
+        }
+
+        // 2. Render Venues Dynamically
+        if (data.venues && data.venues.length > 0) {
+          const venuesContainer = document.getElementById('venuesContainer');
+          venuesContainer.innerHTML = '';
+          data.venues.forEach((v, index) => {
+            const isNavy = index % 2 === 1;
+            const borderColor = isNavy ? 'border-navy' : 'border-dusty';
+            const badgeBg = isNavy ? 'bg-navy text-beige' : 'bg-beige text-navy';
+            const linkColor = isNavy ? 'text-navy' : 'text-dusty-dark';
+
+            const card = document.createElement('div');
+            card.className = `bg-cardBg p-5 rounded-3xl shadow-sm border-l-4 ${borderColor}`;
+            card.innerHTML = `
+              <div class="flex justify-between items-center">
+                <span class="text-[10px] ${badgeBg} px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">${v.category}</span>
+                <span class="text-xs font-semibold ${linkColor}">${v.time}</span>
+              </div>
+              <h3 class="text-xl font-serif mt-2 text-navy">${v.title}</h3>
+              <p class="text-xs text-gray-500 mt-0.5">${v.address}</p>
+              ${v.callTime ? `<p class="text-xs ${linkColor} font-medium mt-1.5">${v.callTime}</p>` : ''}
+              ${v.mapUrl ? `<a href="${v.mapUrl}" target="_blank" class="inline-flex items-center gap-1 mt-3 text-xs font-semibold ${linkColor} hover:underline">📍 Open in Google Maps &rarr;</a>` : ''}
+            `;
+            venuesContainer.appendChild(card);
+          });
+        }
+
+        // 3. Render Posts Feed
+        renderPosts(data.posts || []);
+
+      } catch (err) {
+        console.error("Error loading data from Google Sheet:", err);
+      }
+    }
 
     // Navigation Switcher
     function navigateTo(target) {
@@ -316,8 +330,59 @@
       window.scrollTo(0, 0);
 
       if (target === 'feed') {
-        fetchFeed();
+        loadData();
       }
+    }
+
+    // Render feed items
+    function renderPosts(posts) {
+      const container = document.getElementById('postsContainer');
+      const loader = document.getElementById('postsLoader');
+      loader.classList.add('hidden');
+      container.innerHTML = "";
+
+      if (posts.length === 0) {
+        container.innerHTML = `<p class="text-center text-xs text-gray-400 py-6">No moments shared yet. Be the first to snap a candid photo!</p>`;
+        return;
+      }
+
+      posts.forEach(post => {
+        const card = document.createElement('div');
+        card.className = "bg-cardBg rounded-3xl shadow-sm border border-dusty/30 overflow-hidden";
+
+        let mediaHtml = "";
+        if (post.mediaType === 'photo' && post.mediaUrl) {
+          mediaHtml = `<img src="${post.mediaUrl}" class="w-full h-80 object-cover" loading="lazy" />`;
+        } else if (post.mediaType === 'audio' && post.mediaUrl) {
+          mediaHtml = `
+            <div class="p-5 bg-beige/50 flex items-center justify-center border-b border-dusty/20">
+              <audio controls class="w-full"><source src="${post.mediaUrl}" type="audio/webm"></audio>
+            </div>`;
+        }
+
+        card.innerHTML = `
+          <div class="p-4 pb-2 flex justify-between items-center border-b border-dusty/10">
+            <span class="font-serif italic font-semibold text-navy text-base">${post.guestName}</span>
+            <span class="text-[10px] text-gray-400">${new Date(post.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+          </div>
+          ${mediaHtml}
+          <div class="p-4">
+            ${post.caption ? `<p class="text-xs text-navy/90 leading-relaxed mb-3">${post.caption}</p>` : ''}
+            <div class="flex items-center gap-2 pt-2 border-t border-dusty/20">
+              <button onclick="sendReaction('${post.id}', 'heart', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
+                ❤️ <span>${post.reactions?.heart || 0}</span>
+              </button>
+              <button onclick="sendReaction('${post.id}', 'toast', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
+                🥂 <span>${post.reactions?.toast || 0}</span>
+              </button>
+              <button onclick="sendReaction('${post.id}', 'laugh', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
+                ✨ <span>${post.reactions?.laugh || 0}</span>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
     }
 
     // Media Switch (Photo vs Audio)
@@ -381,7 +446,7 @@
           status.innerText = "Recording... tap to finish";
           btn.classList.add('bg-red-500', 'animate-pulse');
         } catch (err) {
-          alert("Microphone permission denied or not supported on this browser.");
+          alert("Microphone permission denied or not supported.");
         }
       } else if (mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
@@ -390,7 +455,7 @@
       }
     }
 
-    // Submit form
+    // Submit post
     document.getElementById('uploadForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
@@ -413,7 +478,7 @@
           body: JSON.stringify(payload)
         });
 
-        alert("Your moment has been shared with Sarah & James!");
+        alert("Your moment has been shared!");
         document.getElementById('uploadForm').reset();
         document.getElementById('imagePreview').classList.add('hidden');
         document.getElementById('audioPreview').classList.add('hidden');
@@ -426,65 +491,6 @@
         submitBtn.innerText = "Publish to Live Feed";
       }
     });
-
-    // Fetch feed
-    async function fetchFeed() {
-      const container = document.getElementById('postsContainer');
-      const loader = document.getElementById('postsLoader');
-      loader.classList.remove('hidden');
-
-      try {
-        const res = await fetch(GAS_ENDPOINT);
-        const data = await res.json();
-        loader.classList.add('hidden');
-        container.innerHTML = "";
-
-        if (!data.posts || data.posts.length === 0) {
-          container.innerHTML = `<p class="text-center text-xs text-gray-400 py-6">No moments shared yet. Be the first to snap a candid photo!</p>`;
-          return;
-        }
-
-        data.posts.forEach(post => {
-          const card = document.createElement('div');
-          card.className = "bg-cardBg rounded-3xl shadow-sm border border-dusty/30 overflow-hidden";
-
-          let mediaHtml = "";
-          if (post.mediaType === 'photo' && post.mediaUrl) {
-            mediaHtml = `<img src="${post.mediaUrl}" class="w-full h-80 object-cover" loading="lazy" />`;
-          } else if (post.mediaType === 'audio' && post.mediaUrl) {
-            mediaHtml = `
-              <div class="p-5 bg-beige/50 flex items-center justify-center border-b border-dusty/20">
-                <audio controls class="w-full"><source src="${post.mediaUrl}" type="audio/webm"></audio>
-              </div>`;
-          }
-
-          card.innerHTML = `
-            <div class="p-4 pb-2 flex justify-between items-center border-b border-dusty/10">
-              <span class="font-serif italic font-semibold text-navy text-base">${post.guestName}</span>
-              <span class="text-[10px] text-gray-400">${new Date(post.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-            </div>
-            ${mediaHtml}
-            <div class="p-4">
-              ${post.caption ? `<p class="text-xs text-navy/90 leading-relaxed mb-3">${post.caption}</p>` : ''}
-              <div class="flex items-center gap-2 pt-2 border-t border-dusty/20">
-                <button onclick="sendReaction('${post.id}', 'heart', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
-                  ❤️ <span>${post.reactions?.heart || 0}</span>
-                </button>
-                <button onclick="sendReaction('${post.id}', 'toast', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
-                  🥂 <span>${post.reactions?.toast || 0}</span>
-                </button>
-                <button onclick="sendReaction('${post.id}', 'laugh', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
-                  ✨ <span>${post.reactions?.laugh || 0}</span>
-                </button>
-              </div>
-            </div>
-          `;
-          container.appendChild(card);
-        });
-      } catch (err) {
-        loader.innerText = "No posts available yet.";
-      }
-    }
 
     // Reaction handler
     async function sendReaction(postId, type, btnElem) {
@@ -501,6 +507,9 @@
         console.error("Reaction failed");
       }
     }
+
+    // Initial load
+    loadData();
   </script>
 </body>
 </html>
