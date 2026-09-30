@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title id="htmlTitle">Wedding Hub</title>
-  <!-- Elegant Wedding Favicon (stops the 404 error) -->
+  <title id="htmlTitle">Lawrence & Sharmaine — Wedding Hub</title>
+  
+  <!-- Wedding Ring Favicon (eliminates the 404 error) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>">
+
   <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
@@ -51,19 +53,19 @@
     <!-- Hero Image Background with Gradient Overlay -->
     <div class="absolute inset-0 z-0 bg-navy">
       <img id="heroImage" 
-           src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80" 
-           alt="Hero Image" 
+           src="https://i.imgur.com/DeCF3mR.jpeg" 
+           alt="Lawrence & Sharmaine" 
            class="w-full h-full object-cover object-center filter brightness-[0.88] transition-opacity duration-700 opacity-90" />
       <div class="absolute inset-0 bg-gradient-to-b from-navy/70 via-transparent to-navy/90"></div>
     </div>
 
-    <!-- Top Text on Hero (Dynamic from Sheet) -->
+    <!-- Top Text on Hero -->
     <div class="relative z-10 pt-8 text-center text-beige">
-      <p id="heroTagline" class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-dusty font-medium mb-1 drop-shadow">The Wedding Celebration of</p>
-      <h1 id="heroNames" class="text-5xl md:text-6xl font-serif italic tracking-wide text-white drop-shadow-md">Sarah & James</h1>
+      <p id="heroTagline" class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-dusty font-medium mb-1 drop-shadow">Lawrence found his Sharm</p>
+      <h1 id="heroNames" class="text-4xl md:text-5xl font-serif italic tracking-wide text-white drop-shadow-md">Lawrence & Sharmaine</h1>
       <div class="flex items-center justify-center gap-2 mt-2">
         <span class="h-[1px] w-6 bg-dusty/60"></span>
-        <p id="heroDate" class="text-[11px] uppercase tracking-[0.25em] text-beige/90 font-light">October 24, 2026</p>
+        <p id="heroDate" class="text-[11px] uppercase tracking-[0.25em] text-beige/90 font-light">December 19, 2026</p>
         <span class="h-[1px] w-6 bg-dusty/60"></span>
       </div>
     </div>
@@ -188,7 +190,7 @@
 
           <div>
             <label class="block text-[11px] uppercase tracking-wider font-semibold mb-1 text-navy">Sweet Note / Caption</label>
-            <textarea id="captionInput" rows="2" placeholder="Leave a sweet message for the couple..." class="w-full text-xs p-3.5 bg-beige/60 border border-dusty/40 rounded-xl focus:outline-none focus:border-navy"></textarea>
+            <textarea id="captionInput" rows="2" placeholder="Leave a sweet message for Lawrence & Sharmaine..." class="w-full text-xs p-3.5 bg-beige/60 border border-dusty/40 rounded-xl focus:outline-none focus:border-navy"></textarea>
           </div>
 
           <button type="submit" id="submitBtn" class="w-full py-3.5 bg-navy text-beige rounded-xl font-medium tracking-wider uppercase text-xs shadow-md hover:bg-navy-light transition disabled:opacity-50">
@@ -204,7 +206,6 @@
           <p class="text-xs text-dusty-dark font-light mt-0.5">Call times and directions to our special places</p>
         </div>
 
-        <!-- Dynamic Venues Container (Populated from Google Sheet) -->
         <div id="venuesContainer" class="space-y-4"></div>
       </section>
 
@@ -228,7 +229,6 @@
   </div>
 
   <script>
-    // --- YOUR GOOGLE APPS SCRIPT URL ---
     const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbxbNFL68EWM-hasknUUediMIbb0_T_Dx8mDe1aouWX-BuCFNcDv-gbENZMaESaSw6eTnQ/exec";
 
     let currentMediaType = 'photo';
@@ -237,7 +237,6 @@
     let mediaRecorder = null;
     let audioChunks = [];
 
-    // Helper: Formats Google Drive sharing links to direct thumbnail URLs
     function formatDriveUrl(url) {
       if (!url) return '';
       const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
@@ -247,28 +246,34 @@
       return url;
     }
 
-    // Load CMS Data & Feed
+    // Format date nicely if Google returns it as an ISO string
+    function formatDateString(str) {
+      if (!str) return '';
+      const d = new Date(str);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      }
+      return str;
+    }
+
     async function loadData() {
       try {
         const res = await fetch(GAS_ENDPOINT);
         const data = await res.json();
 
-        // 1. Apply Settings (Hero Image, Names, Date)
         if (data.settings) {
           const s = data.settings;
           if (s.couple_names) {
             document.getElementById('heroNames').innerText = s.couple_names;
             document.getElementById('htmlTitle').innerText = `${s.couple_names} — Wedding Hub`;
           }
-          if (s.wedding_date) document.getElementById('heroDate').innerText = s.wedding_date;
+          if (s.wedding_date) document.getElementById('heroDate').innerText = formatDateString(s.wedding_date);
           if (s.tagline) document.getElementById('heroTagline').innerText = s.tagline;
           if (s.hero_image_url) {
-            const formattedUrl = formatDriveUrl(s.hero_image_url);
-            document.getElementById('heroImage').src = formattedUrl;
+            document.getElementById('heroImage').src = formatDriveUrl(s.hero_image_url);
           }
         }
 
-        // 2. Render Venues Dynamically
         if (data.venues && data.venues.length > 0) {
           const venuesContainer = document.getElementById('venuesContainer');
           venuesContainer.innerHTML = '';
@@ -294,15 +299,12 @@
           });
         }
 
-        // 3. Render Posts Feed
         renderPosts(data.posts || []);
-
       } catch (err) {
         console.error("Error loading data from Google Sheet:", err);
       }
     }
 
-    // Navigation Switcher
     function navigateTo(target) {
       const homeView = document.getElementById('view-home');
       const subpageWrapper = document.getElementById('subpage-wrapper');
@@ -336,7 +338,6 @@
       }
     }
 
-    // Render feed items
     function renderPosts(posts) {
       const container = document.getElementById('postsContainer');
       const loader = document.getElementById('postsLoader');
@@ -387,7 +388,6 @@
       });
     }
 
-    // Media Switch (Photo vs Audio)
     function setMediaType(type) {
       currentMediaType = type;
       base64Media = null;
@@ -404,7 +404,6 @@
       }
     }
 
-    // Image preview
     function previewImage(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -419,7 +418,6 @@
       reader.readAsDataURL(file);
     }
 
-    // Audio recording
     async function toggleRecording() {
       const status = document.getElementById('recordingStatus');
       const btn = document.getElementById('recordBtn');
@@ -457,7 +455,6 @@
       }
     }
 
-    // Submit post
     document.getElementById('uploadForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
@@ -480,7 +477,7 @@
           body: JSON.stringify(payload)
         });
 
-        alert("Your moment has been shared!");
+        alert("Your moment has been shared with Lawrence & Sharmaine!");
         document.getElementById('uploadForm').reset();
         document.getElementById('imagePreview').classList.add('hidden');
         document.getElementById('audioPreview').classList.add('hidden');
@@ -494,7 +491,6 @@
       }
     });
 
-    // Reaction handler
     async function sendReaction(postId, type, btnElem) {
       const span = btnElem.querySelector('span');
       span.innerText = parseInt(span.innerText) + 1;
@@ -510,7 +506,7 @@
       }
     }
 
-    // Initial load
+    // Load CMS data on start
     loadData();
   </script>
 </body>
