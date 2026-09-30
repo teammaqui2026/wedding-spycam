@@ -135,16 +135,21 @@
   <!-- ========================================== -->
   <div id="subpage-wrapper" class="hidden relative z-10 min-h-screen pb-32">
 
-    <!-- Translucent Glass Top Bar -->
-    <header class="sticky top-0 z-40 bg-navy/60 backdrop-blur-md text-beige px-4 py-3 flex items-center justify-between border-b border-white/10 shadow-sm">
-      <button onclick="navigateTo('home')" class="flex items-center gap-1.5 text-xs text-dusty hover:text-white uppercase tracking-wider font-semibold focus:outline-none transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <!-- Completely Transparent Floating Top Bar -->
+    <header class="sticky top-0 z-40 bg-transparent px-5 pt-5 pb-2 flex items-center justify-between pointer-events-auto">
+      <!-- Transparent Glass "Home" Pill Button -->
+      <button onclick="navigateTo('home')" class="flex items-center gap-1 text-[11px] bg-black/30 backdrop-blur-md border border-white/25 px-3 py-1.5 rounded-full text-white hover:text-dusty uppercase tracking-widest font-medium shadow-lg transition active:scale-95 focus:outline-none">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
         Home
       </button>
-      <h2 id="topBarTitle" class="text-sm font-serif italic text-white tracking-wide">Live Feed</h2>
-      <div class="w-12"></div>
+    
+      <!-- Elegant Centered Title with Drop Shadow -->
+      <h2 id="topBarTitle" class="text-base font-serif italic text-white tracking-widest drop-shadow-md">Live Feed</h2>
+    
+      <!-- Invisible Spacer for optical centering -->
+      <div class="w-16"></div>
     </header>
 
     <main class="max-w-md mx-auto p-4">
