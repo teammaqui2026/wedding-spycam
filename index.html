@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title id="htmlTitle">Lawrence & Sharmaine — Wedding Hub</title>
   
-  <!-- Wedding Ring Favicon (eliminates the 404 error) -->
+  <!-- Wedding Ring Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>">
 
   <!-- Tailwind CSS & Google Fonts -->
@@ -34,53 +34,69 @@
   </script>
 
   <style>
+    /* Smooth view transitions */
     .fade-in {
       animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Background smooth blur transition */
+    #globalHeroImage {
+      transition: filter 0.5s ease, transform 0.5s ease;
+    }
+    .bg-state-home {
+      filter: blur(0px) brightness(0.85);
+      transform: scale(1);
+    }
+    .bg-state-blurred {
+      filter: blur(14px) brightness(0.65);
+      transform: scale(1.08); /* Prevents white blur edges */
     }
   </style>
 </head>
-<body class="bg-beige text-navy font-sans antialiased min-h-screen selection:bg-dusty/30">
+<body class="text-navy font-sans antialiased min-h-screen relative selection:bg-dusty/30 overflow-x-hidden">
 
   <!-- ========================================== -->
-  <!-- 1. HOME SCREEN (HERO PHOTO & TRANSPARENT ICONS) -->
+  <!-- PERSISTENT HERO BACKGROUND (BLURS ON TABS) -->
   <!-- ========================================== -->
-  <section id="view-home" class="relative w-full h-screen max-w-md mx-auto overflow-hidden flex flex-col justify-between p-6 select-none">
+  <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-navy">
+    <img id="globalHeroImage" 
+         src="https://i.imgur.com/DeCF3mR.jpeg" 
+         alt="Hero Background" 
+         class="w-full h-full object-cover object-center bg-state-home" />
+    <div id="bgGradient" class="absolute inset-0 bg-gradient-to-b from-navy/60 via-navy/30 to-navy/85 transition-opacity duration-500"></div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 1. HOME SCREEN VIEW -->
+  <!-- ========================================== -->
+  <section id="view-home" class="relative z-10 w-full h-screen max-w-md mx-auto flex flex-col justify-between p-6 select-none">
     
-    <!-- Hero Image Background with Gradient Overlay -->
-    <div class="absolute inset-0 z-0 bg-navy">
-      <img id="heroImage" 
-           src="https://i.imgur.com/DeCF3mR.jpeg" 
-           alt="Lawrence & Sharmaine" 
-           class="w-full h-full object-cover object-center filter brightness-[0.88] transition-opacity duration-700 opacity-90" />
-      <div class="absolute inset-0 bg-gradient-to-b from-navy/70 via-transparent to-navy/90"></div>
-    </div>
-
     <!-- Top Text on Hero -->
-    <div class="relative z-10 pt-8 text-center text-beige">
-      <p id="heroTagline" class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-dusty font-medium mb-1 drop-shadow">Lawrence found his Sharm</p>
-      <h1 id="heroNames" class="text-4xl md:text-5xl font-serif italic tracking-wide text-white drop-shadow-md">Lawrence & Sharmaine</h1>
+    <div class="pt-8 text-center text-beige">
+      <p id="heroTagline" class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-dusty font-medium mb-1 drop-shadow-md">Lawrence found his Sharm</p>
+      <h1 id="heroNames" class="text-4xl md:text-5xl font-serif italic tracking-wide text-white drop-shadow-lg">Lawrence & Sharmaine</h1>
       <div class="flex items-center justify-center gap-2 mt-2">
         <span class="h-[1px] w-6 bg-dusty/60"></span>
-        <p id="heroDate" class="text-[11px] uppercase tracking-[0.25em] text-beige/90 font-light">December 19, 2026</p>
+        <p id="heroDate" class="text-[11px] uppercase tracking-[0.25em] text-beige/90 font-light drop-shadow">December 19, 2026</p>
         <span class="h-[1px] w-6 bg-dusty/60"></span>
       </div>
     </div>
 
     <!-- Bottom Transparent Action Icons -->
-    <div class="relative z-10 pb-6">
+    <div class="pb-6">
       <p class="text-center text-[10px] uppercase tracking-[0.2em] text-dusty/90 mb-5 font-medium drop-shadow">
         Tap to explore our day
       </p>
 
       <div class="flex items-center justify-around px-2">
         
-        <!-- Button 1: Spy Cam (Capture) -->
+        <!-- Button: Spy Cam -->
         <button onclick="navigateTo('upload')" class="group flex flex-col items-center focus:outline-none transition transform active:scale-95">
-          <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-[2px]">
+          <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-sm">
             <svg class="w-6 h-6 text-white group-hover:text-dusty transition duration-200" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
@@ -89,9 +105,9 @@
           <span class="mt-2 text-[11px] tracking-wider uppercase text-white/90 font-medium group-hover:text-dusty drop-shadow">Spy Cam</span>
         </button>
 
-        <!-- Button 2: Moments Feed -->
+        <!-- Button: Live Feed -->
         <button onclick="navigateTo('feed')" class="group flex flex-col items-center focus:outline-none transition transform active:scale-95">
-          <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-[2px]">
+          <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-sm">
             <svg class="w-6 h-6 text-white group-hover:text-dusty transition duration-200" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
             </svg>
@@ -99,9 +115,9 @@
           <span class="mt-2 text-[11px] tracking-wider uppercase text-white/90 font-medium group-hover:text-dusty drop-shadow">Live Feed</span>
         </button>
 
-        <!-- Button 3: Itinerary & Maps -->
+        <!-- Button: Itinerary -->
         <button onclick="navigateTo('details')" class="group flex flex-col items-center focus:outline-none transition transform active:scale-95">
-          <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-[2px]">
+          <div class="w-14 h-14 flex items-center justify-center bg-transparent border border-white/40 rounded-full hover:border-dusty transition-colors duration-300 drop-shadow-lg backdrop-blur-sm">
             <svg class="w-6 h-6 text-white group-hover:text-dusty transition duration-200" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
@@ -117,11 +133,11 @@
   <!-- ========================================== -->
   <!-- 2. CONTENT VIEWS (FEED, UPLOAD, ITINERARY) -->
   <!-- ========================================== -->
-  <div id="subpage-wrapper" class="hidden min-h-screen pb-28">
+  <div id="subpage-wrapper" class="hidden relative z-10 min-h-screen pb-32">
 
-    <!-- Compact Top Bar -->
-    <header class="sticky top-0 z-40 bg-navy text-beige px-4 py-3 flex items-center justify-between border-b border-dusty/40 shadow-sm">
-      <button onclick="navigateTo('home')" class="flex items-center gap-1.5 text-xs text-dusty hover:text-white uppercase tracking-wider font-semibold focus:outline-none">
+    <!-- Translucent Glass Top Bar -->
+    <header class="sticky top-0 z-40 bg-navy/60 backdrop-blur-md text-beige px-4 py-3 flex items-center justify-between border-b border-white/10 shadow-sm">
+      <button onclick="navigateTo('home')" class="flex items-center gap-1.5 text-xs text-dusty hover:text-white uppercase tracking-wider font-semibold focus:outline-none transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
@@ -135,9 +151,9 @@
 
       <!-- ================= FEED VIEW ================= -->
       <section id="view-feed" class="hidden fade-in space-y-5">
-        <div class="text-center my-1">
-          <h2 class="text-3xl font-serif italic text-navy">Live Wedding Moments</h2>
-          <p class="text-xs text-dusty-dark font-light mt-0.5">Guest candid photos and heartfelt voice notes</p>
+        <div class="text-center my-2">
+          <h2 class="text-3xl font-serif italic text-white drop-shadow-md">Live Wedding Moments</h2>
+          <p class="text-xs text-dusty font-light mt-0.5 drop-shadow">Guest candid photos and heartfelt voice notes</p>
         </div>
 
         <div id="postsLoader" class="text-center py-12 text-dusty font-serif italic text-lg animate-pulse">
@@ -149,25 +165,27 @@
 
       <!-- ================= CAPTURE / UPLOAD VIEW ================= -->
       <section id="view-upload" class="hidden fade-in space-y-4">
-        <div class="text-center mb-1">
-          <h2 class="text-3xl font-serif italic text-navy">Be Our Spy Cam</h2>
-          <p class="text-xs text-dusty-dark font-light mt-0.5">Capture a sweet candid or send an audio toast</p>
+        <div class="text-center mb-2">
+          <h2 class="text-3xl font-serif italic text-white drop-shadow-md">Be Our Spy Cam</h2>
+          <p class="text-xs text-dusty font-light mt-0.5 drop-shadow">Capture a sweet candid or send an audio toast</p>
         </div>
 
-        <form id="uploadForm" class="bg-cardBg p-5 rounded-3xl shadow-sm border border-dusty/30 space-y-4">
+        <!-- Frosted Glass Card Form -->
+        <form id="uploadForm" class="bg-cardBg/90 backdrop-blur-xl p-5 rounded-3xl shadow-2xl border border-white/50 space-y-4">
           <div>
             <label class="block text-[11px] uppercase tracking-wider font-semibold mb-1 text-navy">Your Name</label>
-            <input type="text" id="guestName" required placeholder="e.g. Aunt Rachel" class="w-full text-xs p-3.5 bg-beige/60 border border-dusty/40 rounded-xl focus:outline-none focus:border-navy">
+            <input type="text" id="guestName" required placeholder="e.g. Aunt Rachel" class="w-full text-xs p-3.5 bg-beige/70 border border-dusty/40 rounded-xl focus:outline-none focus:border-navy">
           </div>
 
-          <div class="grid grid-cols-2 gap-2 p-1 bg-beige rounded-xl border border-dusty/30">
-            <button type="button" onclick="setMediaType('photo')" id="btnPhotoTab" class="py-2.5 text-xs font-semibold rounded-lg bg-navy text-white transition-all">Photo Snap</button>
+          <div class="grid grid-cols-2 gap-2 p-1 bg-beige/60 rounded-xl border border-dusty/30">
+            <button type="button" onclick="setMediaType('photo')" id="btnPhotoTab" class="py-2.5 text-xs font-semibold rounded-lg bg-navy text-white transition-all shadow-sm">Photo Snap</button>
             <button type="button" onclick="setMediaType('audio')" id="btnAudioTab" class="py-2.5 text-xs font-semibold rounded-lg bg-transparent text-navy hover:text-dusty-dark transition-all">Voice Note</button>
           </div>
 
+          <!-- Photo Input -->
           <div id="photoInputGroup" class="space-y-3">
             <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="previewImage(event)">
-            <div onclick="document.getElementById('photoInput').click()" class="cursor-pointer border-2 border-dashed border-dusty rounded-2xl p-7 text-center bg-beige/30 hover:bg-beige/60 transition">
+            <div onclick="document.getElementById('photoInput').click()" class="cursor-pointer border-2 border-dashed border-dusty/80 rounded-2xl p-7 text-center bg-beige/40 hover:bg-beige/70 transition">
               <svg class="mx-auto h-8 w-8 text-dusty-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
@@ -177,7 +195,8 @@
             <img id="imagePreview" class="hidden w-full h-52 object-cover rounded-2xl border border-dusty/40" />
           </div>
 
-          <div id="audioInputGroup" class="hidden text-center space-y-3 p-5 bg-beige/40 rounded-2xl border border-dusty/30">
+          <!-- Audio Input -->
+          <div id="audioInputGroup" class="hidden text-center space-y-3 p-5 bg-beige/50 rounded-2xl border border-dusty/30">
             <p class="text-xs text-gray-500">Record a heartfelt wish or toast</p>
             <div class="flex justify-center items-center gap-3">
               <button type="button" id="recordBtn" onclick="toggleRecording()" class="w-14 h-14 rounded-full bg-dusty text-navy flex items-center justify-center shadow-md hover:bg-dusty-dark transition active:scale-95 text-xl">
@@ -190,7 +209,7 @@
 
           <div>
             <label class="block text-[11px] uppercase tracking-wider font-semibold mb-1 text-navy">Sweet Note / Caption</label>
-            <textarea id="captionInput" rows="2" placeholder="Leave a sweet message for Lawrence & Sharmaine..." class="w-full text-xs p-3.5 bg-beige/60 border border-dusty/40 rounded-xl focus:outline-none focus:border-navy"></textarea>
+            <textarea id="captionInput" rows="2" placeholder="Leave a sweet message for Lawrence & Sharmaine..." class="w-full text-xs p-3.5 bg-beige/70 border border-dusty/40 rounded-xl focus:outline-none focus:border-navy"></textarea>
           </div>
 
           <button type="submit" id="submitBtn" class="w-full py-3.5 bg-navy text-beige rounded-xl font-medium tracking-wider uppercase text-xs shadow-md hover:bg-navy-light transition disabled:opacity-50">
@@ -201,9 +220,9 @@
 
       <!-- ================= ITINERARY & VENUES VIEW ================= -->
       <section id="view-details" class="hidden fade-in space-y-4">
-        <div class="text-center mb-1">
-          <h2 class="text-3xl font-serif italic text-navy">Venues & Schedule</h2>
-          <p class="text-xs text-dusty-dark font-light mt-0.5">Call times and directions to our special places</p>
+        <div class="text-center mb-2">
+          <h2 class="text-3xl font-serif italic text-white drop-shadow-md">Venues & Schedule</h2>
+          <p class="text-xs text-dusty font-light mt-0.5 drop-shadow">Call times and directions to our special places</p>
         </div>
 
         <div id="venuesContainer" class="space-y-4"></div>
@@ -211,20 +230,42 @@
 
     </main>
 
-    <!-- Floating Bottom Navigation on Subpages -->
-    <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-navy/90 backdrop-blur-md px-6 py-2.5 rounded-full shadow-xl border border-dusty/30 flex items-center gap-7">
-      <button onclick="navigateTo('home')" class="text-white/70 hover:text-white flex flex-col items-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+    <!-- ========================================== -->
+    <!-- TRANSPARENT FLOATING BOTTOM DOCK -->
+    <!-- (Retains home-screen transparent button styling) -->
+    <!-- ========================================== -->
+    <nav class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-black/35 backdrop-blur-xl px-5 py-2 rounded-full shadow-2xl border border-white/20 flex items-center gap-5 select-none">
+      
+      <!-- Home Icon -->
+      <button onclick="navigateTo('home')" id="dock-home" class="group p-2 rounded-full focus:outline-none transition active:scale-90" title="Home">
+        <svg class="w-5 h-5 text-white/80 group-hover:text-dusty transition" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+        </svg>
       </button>
-      <button onclick="navigateTo('upload')" class="text-white/70 hover:text-white flex flex-col items-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" /></svg>
+
+      <!-- Spy Cam Upload Icon -->
+      <button onclick="navigateTo('upload')" id="dock-upload" class="group p-2 rounded-full focus:outline-none transition active:scale-90" title="Spy Cam">
+        <svg class="w-5 h-5 text-white/80 group-hover:text-dusty transition" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+        </svg>
       </button>
-      <button onclick="navigateTo('feed')" class="text-white/70 hover:text-white flex flex-col items-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+
+      <!-- Feed Icon -->
+      <button onclick="navigateTo('feed')" id="dock-feed" class="group p-2 rounded-full focus:outline-none transition active:scale-90" title="Moments Feed">
+        <svg class="w-5 h-5 text-white/80 group-hover:text-dusty transition" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+        </svg>
       </button>
-      <button onclick="navigateTo('details')" class="text-white/70 hover:text-white flex flex-col items-center">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+
+      <!-- Itinerary Icon -->
+      <button onclick="navigateTo('details')" id="dock-details" class="group p-2 rounded-full focus:outline-none transition active:scale-90" title="Venues">
+        <svg class="w-5 h-5 text-white/80 group-hover:text-dusty transition" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+        </svg>
       </button>
+
     </nav>
   </div>
 
@@ -237,6 +278,7 @@
     let mediaRecorder = null;
     let audioChunks = [];
 
+    // Formats Google Drive sharing links
     function formatDriveUrl(url) {
       if (!url) return '';
       const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
@@ -246,7 +288,25 @@
       return url;
     }
 
-    // Format date nicely if Google returns it as an ISO string
+    // Clean Google Sheets Date object strings into clean times (e.g., 08:00 AM)
+    function formatTimeString(timeStr) {
+      if (!timeStr) return '';
+      const clean = String(timeStr).replace(/\[\d+\]/g, '').trim();
+      // If it's already "08:00 AM" or similar
+      if (/^\d{1,2}:\d{2}\s*(AM|PM)?$/i.test(clean)) return clean;
+      
+      // If it's an ISO timestamp like 1899-12-30T00:00:00.000Z
+      const d = new Date(clean);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+      return clean;
+    }
+
+    function cleanText(str) {
+      return str ? String(str).replace(/\[\d+\]/g, '').trim() : '';
+    }
+
     function formatDateString(str) {
       if (!str) return '';
       const d = new Date(str);
@@ -261,6 +321,7 @@
         const res = await fetch(GAS_ENDPOINT);
         const data = await res.json();
 
+        // 1. Settings
         if (data.settings) {
           const s = data.settings;
           if (s.couple_names) {
@@ -270,10 +331,11 @@
           if (s.wedding_date) document.getElementById('heroDate').innerText = formatDateString(s.wedding_date);
           if (s.tagline) document.getElementById('heroTagline').innerText = s.tagline;
           if (s.hero_image_url) {
-            document.getElementById('heroImage').src = formatDriveUrl(s.hero_image_url);
+            document.getElementById('globalHeroImage').src = formatDriveUrl(s.hero_image_url);
           }
         }
 
+        // 2. Venues (with Time & Citation Bug Fix)
         if (data.venues && data.venues.length > 0) {
           const venuesContainer = document.getElementById('venuesContainer');
           venuesContainer.innerHTML = '';
@@ -284,30 +346,33 @@
             const linkColor = isNavy ? 'text-navy' : 'text-dusty-dark';
 
             const card = document.createElement('div');
-            card.className = `bg-cardBg p-5 rounded-3xl shadow-sm border-l-4 ${borderColor}`;
+            card.className = `bg-cardBg/90 backdrop-blur-xl p-5 rounded-3xl shadow-2xl border border-white/50 border-l-4 ${borderColor}`;
             card.innerHTML = `
               <div class="flex justify-between items-center">
-                <span class="text-[10px] ${badgeBg} px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">${v.category}</span>
-                <span class="text-xs font-semibold ${linkColor}">${v.time}</span>
+                <span class="text-[10px] ${badgeBg} px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider">${cleanText(v.category)}</span>
+                <span class="text-xs font-semibold ${linkColor}">${formatTimeString(v.time)}</span>
               </div>
-              <h3 class="text-xl font-serif mt-2 text-navy">${v.title}</h3>
-              <p class="text-xs text-gray-500 mt-0.5">${v.address}</p>
-              ${v.callTime ? `<p class="text-xs ${linkColor} font-medium mt-1.5">${v.callTime}</p>` : ''}
-              ${v.mapUrl ? `<a href="${v.mapUrl}" target="_blank" class="inline-flex items-center gap-1 mt-3 text-xs font-semibold ${linkColor} hover:underline">📍 Open in Google Maps &rarr;</a>` : ''}
+              <h3 class="text-xl font-serif mt-2 text-navy">${cleanText(v.title)}</h3>
+              <p class="text-xs text-gray-600 mt-0.5">${cleanText(v.address)}</p>
+              ${v.callTime ? `<p class="text-xs ${linkColor} font-medium mt-1.5">${cleanText(v.callTime)}</p>` : ''}
+              ${v.mapUrl ? `<a href="${cleanText(v.mapUrl)}" target="_blank" class="inline-flex items-center gap-1 mt-3 text-xs font-semibold ${linkColor} hover:underline">📍 Open in Google Maps &rarr;</a>` : ''}
             `;
             venuesContainer.appendChild(card);
           });
         }
 
+        // 3. Posts
         renderPosts(data.posts || []);
       } catch (err) {
         console.error("Error loading data from Google Sheet:", err);
       }
     }
 
+    // Navigation Switcher & Blur Handler
     function navigateTo(target) {
       const homeView = document.getElementById('view-home');
       const subpageWrapper = document.getElementById('subpage-wrapper');
+      const heroImg = document.getElementById('globalHeroImage');
       const views = ['feed', 'upload', 'details'];
       const titleMap = {
         feed: 'Live Wedding Moments',
@@ -315,13 +380,23 @@
         details: 'Itinerary & Venues'
       };
 
+      // Reset active state on dock icons
+      ['upload', 'feed', 'details'].forEach(t => {
+        const btn = document.getElementById(`dock-${t}`);
+        if (btn) btn.classList.remove('text-dusty', 'border-b-2', 'border-dusty');
+      });
+
       if (target === 'home') {
         subpageWrapper.classList.add('hidden');
         homeView.classList.remove('hidden');
+        // Unblur background for home
+        heroImg.className = "w-full h-full object-cover object-center bg-state-home";
         window.scrollTo(0, 0);
         return;
       }
 
+      // Blur background for subpages
+      heroImg.className = "w-full h-full object-cover object-center bg-state-blurred";
       homeView.classList.add('hidden');
       subpageWrapper.classList.remove('hidden');
 
@@ -331,6 +406,10 @@
 
       document.getElementById(`view-${target}`).classList.remove('hidden');
       document.getElementById('topBarTitle').innerText = titleMap[target];
+      
+      const activeDockBtn = document.getElementById(`dock-${target}`);
+      if (activeDockBtn) activeDockBtn.classList.add('text-dusty');
+
       window.scrollTo(0, 0);
 
       if (target === 'feed') {
@@ -345,40 +424,40 @@
       container.innerHTML = "";
 
       if (posts.length === 0) {
-        container.innerHTML = `<p class="text-center text-xs text-gray-400 py-6">No moments shared yet. Be the first to snap a candid photo!</p>`;
+        container.innerHTML = `<p class="text-center text-xs text-dusty py-6 drop-shadow">No moments shared yet. Be the first to snap a candid photo!</p>`;
         return;
       }
 
       posts.forEach(post => {
         const card = document.createElement('div');
-        card.className = "bg-cardBg rounded-3xl shadow-sm border border-dusty/30 overflow-hidden";
+        card.className = "bg-cardBg/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden";
 
         let mediaHtml = "";
         if (post.mediaType === 'photo' && post.mediaUrl) {
           mediaHtml = `<img src="${post.mediaUrl}" class="w-full h-80 object-cover" loading="lazy" />`;
         } else if (post.mediaType === 'audio' && post.mediaUrl) {
           mediaHtml = `
-            <div class="p-5 bg-beige/50 flex items-center justify-center border-b border-dusty/20">
+            <div class="p-5 bg-beige/60 flex items-center justify-center border-b border-dusty/20">
               <audio controls class="w-full"><source src="${post.mediaUrl}" type="audio/webm"></audio>
             </div>`;
         }
 
         card.innerHTML = `
-          <div class="p-4 pb-2 flex justify-between items-center border-b border-dusty/10">
+          <div class="p-4 pb-2 flex justify-between items-center border-b border-dusty/15">
             <span class="font-serif italic font-semibold text-navy text-base">${post.guestName}</span>
-            <span class="text-[10px] text-gray-400">${new Date(post.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+            <span class="text-[10px] text-gray-500">${new Date(post.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
           </div>
           ${mediaHtml}
           <div class="p-4">
             ${post.caption ? `<p class="text-xs text-navy/90 leading-relaxed mb-3">${post.caption}</p>` : ''}
             <div class="flex items-center gap-2 pt-2 border-t border-dusty/20">
-              <button onclick="sendReaction('${post.id}', 'heart', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
+              <button onclick="sendReaction('${post.id}', 'heart', this)" class="text-xs flex items-center gap-1 bg-beige/80 px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
                 ❤️ <span>${post.reactions?.heart || 0}</span>
               </button>
-              <button onclick="sendReaction('${post.id}', 'toast', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
+              <button onclick="sendReaction('${post.id}', 'toast', this)" class="text-xs flex items-center gap-1 bg-beige/80 px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
                 🥂 <span>${post.reactions?.toast || 0}</span>
               </button>
-              <button onclick="sendReaction('${post.id}', 'laugh', this)" class="text-xs flex items-center gap-1 bg-beige px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
+              <button onclick="sendReaction('${post.id}', 'laugh', this)" class="text-xs flex items-center gap-1 bg-beige/80 px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
                 ✨ <span>${post.reactions?.laugh || 0}</span>
               </button>
             </div>
@@ -394,12 +473,12 @@
       if (type === 'photo') {
         document.getElementById('photoInputGroup').classList.remove('hidden');
         document.getElementById('audioInputGroup').classList.add('hidden');
-        document.getElementById('btnPhotoTab').className = "py-2.5 text-xs font-semibold rounded-lg bg-navy text-white transition-all";
+        document.getElementById('btnPhotoTab').className = "py-2.5 text-xs font-semibold rounded-lg bg-navy text-white transition-all shadow-sm";
         document.getElementById('btnAudioTab').className = "py-2.5 text-xs font-semibold rounded-lg bg-transparent text-navy hover:text-dusty-dark transition-all";
       } else {
         document.getElementById('photoInputGroup').classList.add('hidden');
         document.getElementById('audioInputGroup').classList.remove('hidden');
-        document.getElementById('btnAudioTab').className = "py-2.5 text-xs font-semibold rounded-lg bg-navy text-white transition-all";
+        document.getElementById('btnAudioTab').className = "py-2.5 text-xs font-semibold rounded-lg bg-navy text-white transition-all shadow-sm";
         document.getElementById('btnPhotoTab').className = "py-2.5 text-xs font-semibold rounded-lg bg-transparent text-navy hover:text-dusty-dark transition-all";
       }
     }
@@ -506,7 +585,7 @@
       }
     }
 
-    // Load CMS data on start
+    // Initial Load
     loadData();
   </script>
 </body>
