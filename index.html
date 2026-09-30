@@ -34,7 +34,6 @@
   </script>
 
   <style>
-    /* Smooth view transitions */
     .fade-in {
       animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -43,7 +42,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Background smooth blur transition */
     #globalHeroImage {
       transition: filter 0.5s ease, transform 0.5s ease;
     }
@@ -53,7 +51,16 @@
     }
     .bg-state-blurred {
       filter: blur(14px) brightness(0.65);
-      transform: scale(1.08); /* Prevents white blur edges */
+      transform: scale(1.08);
+    }
+
+    /* Waveform Pulse while playing */
+    @keyframes wavePulse {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(1.35); }
+    }
+    .wave-playing {
+      animation: wavePulse 0.9s ease-in-out infinite alternate;
     }
   </style>
 </head>
@@ -135,27 +142,23 @@
   <!-- ========================================== -->
   <div id="subpage-wrapper" class="hidden relative z-10 min-h-screen pb-32">
 
-    <!-- Completely Transparent Floating Top Bar -->
+    <!-- Transparent Floating Top Bar -->
     <header class="sticky top-0 z-40 bg-transparent px-5 pt-5 pb-2 flex items-center justify-between pointer-events-auto">
-      <!-- Transparent Glass "Home" Pill Button -->
       <button onclick="navigateTo('home')" class="flex items-center gap-1 text-[11px] bg-black/30 backdrop-blur-md border border-white/25 px-3 py-1.5 rounded-full text-white hover:text-dusty uppercase tracking-widest font-medium shadow-lg transition active:scale-95 focus:outline-none">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
         Home
       </button>
-    
-      <!-- Elegant Centered Title with Drop Shadow -->
+
       <h2 id="topBarTitle" class="text-base font-serif italic text-white tracking-widest drop-shadow-md">Live Feed</h2>
-    
-      <!-- Invisible Spacer for optical centering -->
       <div class="w-16"></div>
     </header>
 
     <main class="max-w-md mx-auto p-4">
 
       <!-- ================= FEED VIEW ================= -->
-      <section id="view-feed" class="hidden fade-in space-y-5">
+      <section id="view-feed" class="hidden fade-in space-y-6">
         <div class="text-center my-2">
           <h2 class="text-3xl font-serif italic text-white drop-shadow-md">Live Wedding Moments</h2>
           <p class="text-xs text-dusty font-light mt-0.5 drop-shadow">Guest candid photos and heartfelt voice notes</p>
@@ -235,20 +238,14 @@
 
     </main>
 
-    <!-- ========================================== -->
-    <!-- TRANSPARENT FLOATING BOTTOM DOCK -->
-    <!-- (Retains home-screen transparent button styling) -->
-    <!-- ========================================== -->
+    <!-- Transparent Floating Bottom Dock -->
     <nav class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 bg-black/35 backdrop-blur-xl px-5 py-2 rounded-full shadow-2xl border border-white/20 flex items-center gap-5 select-none">
-      
-      <!-- Home Icon -->
       <button onclick="navigateTo('home')" id="dock-home" class="group p-2 rounded-full focus:outline-none transition active:scale-90" title="Home">
         <svg class="w-5 h-5 text-white/80 group-hover:text-dusty transition" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
         </svg>
       </button>
 
-      <!-- Spy Cam Upload Icon -->
       <button onclick="navigateTo('upload')" id="dock-upload" class="group p-2 rounded-full focus:outline-none transition active:scale-90" title="Spy Cam">
         <svg class="w-5 h-5 text-white/80 group-hover:text-dusty transition" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
@@ -256,22 +253,30 @@
         </svg>
       </button>
 
-      <!-- Feed Icon -->
       <button onclick="navigateTo('feed')" id="dock-feed" class="group p-2 rounded-full focus:outline-none transition active:scale-90" title="Moments Feed">
         <svg class="w-5 h-5 text-white/80 group-hover:text-dusty transition" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
         </svg>
       </button>
 
-      <!-- Itinerary Icon -->
       <button onclick="navigateTo('details')" id="dock-details" class="group p-2 rounded-full focus:outline-none transition active:scale-90" title="Venues">
         <svg class="w-5 h-5 text-white/80 group-hover:text-dusty transition" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
         </svg>
       </button>
-
     </nav>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 3. PHOTO LIGHTBOX MODAL (TAP TO EXPAND) -->
+  <!-- ========================================== -->
+  <div id="lightboxModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex flex-col items-center justify-center p-4 cursor-pointer select-none" onclick="closeLightbox()">
+    <button class="absolute top-5 right-5 text-white/80 hover:text-white p-2.5 rounded-full bg-white/10 border border-white/20 transition active:scale-95">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
+    <img id="lightboxImg" class="max-w-full max-h-[85vh] rounded-2xl object-contain shadow-2xl border border-white/20" />
+    <p class="text-white/60 text-xs mt-3 uppercase tracking-widest font-light">Tap anywhere to close</p>
   </div>
 
   <script>
@@ -282,8 +287,8 @@
     let mimeType = null;
     let mediaRecorder = null;
     let audioChunks = [];
+    let currentPlayingAudio = null; // Single active audio instance
 
-    // Formats Google Drive sharing links
     function formatDriveUrl(url) {
       if (!url) return '';
       const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
@@ -293,14 +298,10 @@
       return url;
     }
 
-    // Clean Google Sheets Date object strings into clean times (e.g., 08:00 AM)
     function formatTimeString(timeStr) {
       if (!timeStr) return '';
       const clean = String(timeStr).replace(/\[\d+\]/g, '').trim();
-      // If it's already "08:00 AM" or similar
       if (/^\d{1,2}:\d{2}\s*(AM|PM)?$/i.test(clean)) return clean;
-      
-      // If it's an ISO timestamp like 1899-12-30T00:00:00.000Z
       const d = new Date(clean);
       if (!isNaN(d.getTime())) {
         return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -321,12 +322,291 @@
       return str;
     }
 
+    // Format audio seconds to 0:00
+    function formatAudioSeconds(sec) {
+      if (isNaN(sec) || !isFinite(sec)) return "0:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    // Lightbox Controls
+    function openLightbox(url) {
+      document.getElementById('lightboxImg').src = url;
+      document.getElementById('lightboxModal').classList.remove('hidden');
+    }
+    function closeLightbox() {
+      document.getElementById('lightboxModal').classList.add('hidden');
+    }
+
+    // ==========================================
+    // MODERN EDITORIAL AUDIO WAVEFORM CONTROLLER
+    // ==========================================
+    async function playCustomAudio(audioFileId, btnElem) {
+      const card = btnElem.closest('.audio-card');
+      const audioTag = card.querySelector('.hidden-audio');
+      const playIcon = btnElem.querySelector('.play-icon');
+      const pauseIcon = btnElem.querySelector('.pause-icon');
+      const timerSpan = card.querySelector('.audio-timer');
+      const statusSpan = card.querySelector('.audio-status');
+      const waveformBars = card.querySelectorAll('.wave-bar');
+
+      // Stop any other audio already playing
+      if (currentPlayingAudio && currentPlayingAudio !== audioTag) {
+        currentPlayingAudio.pause();
+        const otherCard = currentPlayingAudio.closest('.audio-card');
+        if (otherCard) {
+          otherCard.querySelector('.play-icon').classList.remove('hidden');
+          otherCard.querySelector('.pause-icon').classList.add('hidden');
+          otherCard.querySelector('.audio-status').innerText = "Voice Toast";
+          otherCard.querySelectorAll('.wave-bar').forEach(b => b.classList.remove('wave-playing'));
+        }
+      }
+
+      // If already loaded and playing -> Pause
+      if (audioTag.src && audioTag.src.startsWith('blob:')) {
+        if (!audioTag.paused) {
+          audioTag.pause();
+          playIcon.classList.remove('hidden');
+          pauseIcon.classList.add('hidden');
+          statusSpan.innerText = "Paused";
+          waveformBars.forEach(b => b.classList.remove('wave-playing'));
+        } else {
+          audioTag.play();
+          playIcon.classList.add('hidden');
+          pauseIcon.classList.remove('hidden');
+          statusSpan.innerText = "Playing...";
+          waveformBars.forEach(b => b.classList.add('wave-playing'));
+          currentPlayingAudio = audioTag;
+        }
+        return;
+      }
+
+      // First time loading: Fetch via proxy
+      statusSpan.innerText = "Streaming...";
+      btnElem.classList.add('animate-pulse');
+
+      try {
+        const res = await fetch(`${GAS_ENDPOINT}?audioId=${audioFileId}`);
+        const base64Data = await res.text();
+        
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'audio/webm' });
+        const playableUrl = URL.createObjectURL(blob);
+
+        audioTag.src = playableUrl;
+        btnElem.classList.remove('animate-pulse');
+        
+        audioTag.play();
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+        statusSpan.innerText = "Playing...";
+        waveformBars.forEach(b => b.classList.add('wave-playing'));
+        currentPlayingAudio = audioTag;
+
+        // Progress Handler
+        audioTag.ontimeupdate = () => {
+          timerSpan.innerText = formatAudioSeconds(audioTag.currentTime);
+          const progress = audioTag.currentTime / (audioTag.duration || 1);
+          const activeIndex = Math.floor(progress * waveformBars.length);
+          
+          waveformBars.forEach((bar, idx) => {
+            if (idx <= activeIndex) {
+              bar.classList.remove('bg-navy/20');
+              bar.classList.add('bg-dusty-dark');
+            } else {
+              bar.classList.remove('bg-dusty-dark');
+              bar.classList.add('bg-navy/20');
+            }
+          });
+        };
+
+        // Ended Handler
+        audioTag.onended = () => {
+          playIcon.classList.remove('hidden');
+          pauseIcon.classList.add('hidden');
+          statusSpan.innerText = "Listen Again";
+          timerSpan.innerText = formatAudioSeconds(audioTag.duration);
+          waveformBars.forEach(b => {
+            b.classList.remove('wave-playing');
+            b.classList.remove('bg-dusty-dark');
+            b.classList.add('bg-navy/20');
+          });
+        };
+
+      } catch (err) {
+        statusSpan.innerText = "Unable to play";
+        btnElem.classList.remove('animate-pulse');
+      }
+    }
+
+    // Scrub Audio by clicking waveform
+    function scrubAudio(e, container) {
+      const card = container.closest('.audio-card');
+      const audio = card.querySelector('.hidden-audio');
+      if (!audio || !audio.duration) return;
+      const rect = container.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, clickX / rect.width));
+      audio.currentTime = pct * audio.duration;
+    }
+
+    // Generate 26 aesthetic waveform bar heights
+    function generateWaveformBars() {
+      const heights = [6, 12, 18, 14, 22, 16, 26, 18, 12, 8, 14, 20, 24, 18, 14, 22, 16, 12, 8, 16, 22, 14, 10, 6];
+      return heights.map((h, i) => `
+        <div class="wave-bar w-[3.5px] bg-navy/20 rounded-full transition-all duration-150" 
+             style="height: ${h}px; animation-delay: ${i * 45}ms;"></div>
+      `).join('');
+    }
+
+    // ==========================================
+    // RENDER POSTS (MODERN EDITORIAL LAYOUT)
+    // ==========================================
+    function renderPosts(posts) {
+      const container = document.getElementById('postsContainer');
+      const loader = document.getElementById('postsLoader');
+      loader.classList.add('hidden');
+      container.innerHTML = "";
+
+      if (posts.length === 0) {
+        container.innerHTML = `<p class="text-center text-xs text-dusty py-6 drop-shadow">No moments shared yet. Be the first to snap a candid photo!</p>`;
+        return;
+      }
+
+      posts.forEach(post => {
+        const initial = (post.guestName || "G").trim().charAt(0).toUpperCase();
+        const postTime = new Date(post.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        // 1. AUDIO CARD (Custom Modern Waveform)
+        if (post.mediaType === 'audio' && post.mediaUrl) {
+          const fileId = post.mediaUrl.includes('id=') ? post.mediaUrl.split('id=')[1] : post.mediaUrl;
+          const audioCard = document.createElement('div');
+          audioCard.className = "audio-card bg-cardBg/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 p-5 space-y-4";
+          
+          audioCard.innerHTML = `
+            <!-- Header with Avatar & Badge -->
+            <div class="flex items-center justify-between border-b border-dusty/15 pb-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-navy text-dusty border border-dusty/40 flex items-center justify-center font-serif text-sm font-bold shadow-sm">${initial}</div>
+                <div>
+                  <h4 class="font-serif italic font-semibold text-navy text-base leading-tight">${post.guestName}</h4>
+                  <span class="text-[10px] text-gray-500 uppercase tracking-wider">${postTime}</span>
+                </div>
+              </div>
+              <span class="text-[10px] uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full bg-dusty/20 text-dusty-dark border border-dusty/30 flex items-center gap-1">
+                🎙️ Voice Toast
+              </span>
+            </div>
+
+            <!-- Waveform Player Container -->
+            <div class="bg-beige/70 border border-dusty/25 rounded-2xl p-4 flex items-center gap-3.5 shadow-inner">
+              <button onclick="playCustomAudio('${fileId}', this)" class="w-12 h-12 rounded-full bg-navy text-beige flex-shrink-0 flex items-center justify-center shadow-md hover:bg-navy-light transition active:scale-95">
+                <svg class="w-5 h-5 ml-0.5 play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="w-5 h-5 pause-icon hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              </button>
+
+              <div class="flex-1 space-y-1.5">
+                <div class="flex items-center justify-between text-[11px] font-medium text-navy/70">
+                  <span class="audio-timer">0:00</span>
+                  <span class="text-dusty-dark text-[10px] uppercase tracking-wider audio-status">Tap to Listen</span>
+                </div>
+                <div class="waveform-container flex items-center gap-[3px] h-6 overflow-hidden cursor-pointer" onclick="scrubAudio(event, this)">
+                  ${generateWaveformBars()}
+                </div>
+              </div>
+              <audio class="hidden-audio hidden"></audio>
+            </div>
+
+            <!-- Caption -->
+            ${post.caption ? `<p class="text-xs text-navy/90 leading-relaxed font-light">${post.caption}</p>` : ''}
+
+            <!-- Reactions Bar -->
+            <div class="flex items-center gap-2 pt-2 border-t border-dusty/20">
+              <button onclick="sendReaction('${post.id}', 'heart', this)" class="text-xs flex items-center gap-1.5 bg-beige/80 hover:bg-dusty/30 border border-dusty/30 px-3 py-1.5 rounded-full transition active:scale-90">
+                ❤️ <span>${post.reactions?.heart || 0}</span>
+              </button>
+              <button onclick="sendReaction('${post.id}', 'toast', this)" class="text-xs flex items-center gap-1.5 bg-beige/80 hover:bg-dusty/30 border border-dusty/30 px-3 py-1.5 rounded-full transition active:scale-90">
+                🥂 <span>${post.reactions?.toast || 0}</span>
+              </button>
+              <button onclick="sendReaction('${post.id}', 'laugh', this)" class="text-xs flex items-center gap-1.5 bg-beige/80 hover:bg-dusty/30 border border-dusty/30 px-3 py-1.5 rounded-full transition active:scale-90">
+                ✨ <span>${post.reactions?.laugh || 0}</span>
+              </button>
+            </div>
+          `;
+          container.appendChild(audioCard);
+        }
+
+        // 2. PHOTO CARD (Modern Editorial Edge-to-Edge with Lightbox)
+        else if (post.mediaType === 'photo' && post.mediaUrl) {
+          const photoCard = document.createElement('div');
+          photoCard.className = "bg-cardBg/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden";
+
+          photoCard.innerHTML = `
+            <!-- Header with Avatar -->
+            <div class="p-4 pb-3 flex items-center justify-between border-b border-dusty/15">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-navy text-dusty border border-dusty/40 flex items-center justify-center font-serif text-sm font-bold shadow-sm">${initial}</div>
+                <div>
+                  <h4 class="font-serif italic font-semibold text-navy text-base leading-tight">${post.guestName}</h4>
+                  <span class="text-[10px] text-gray-500 uppercase tracking-wider">${postTime}</span>
+                </div>
+              </div>
+              <span class="text-[10px] uppercase tracking-wider font-semibold text-dusty-dark">📸 Candid Snap</span>
+            </div>
+
+            <!-- Photo with Tap-to-Zoom & Overlaid Glass Reaction Ribbon -->
+            <div class="relative group cursor-pointer overflow-hidden" onclick="openLightbox('${post.mediaUrl}')">
+              <img src="${post.mediaUrl}" class="w-full h-84 max-h-[380px] object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+              
+              <!-- Zoom Indicator Badge -->
+              <div class="absolute top-3 right-3 bg-black/45 backdrop-blur-md border border-white/25 text-white text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg>
+                <span>Expand</span>
+              </div>
+
+              <!-- Overlaid Glass Reaction Bar (Instagram Editorial Style) -->
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between bg-black/45 backdrop-blur-md border border-white/20 rounded-2xl px-3 py-2 text-white shadow-lg">
+                <div class="flex items-center gap-2">
+                  <button onclick="event.stopPropagation(); sendReaction('${post.id}', 'heart', this)" class="text-xs flex items-center gap-1.5 bg-white/20 hover:bg-white/30 border border-white/20 px-2.5 py-1 rounded-full transition active:scale-90">
+                    ❤️ <span>${post.reactions?.heart || 0}</span>
+                  </button>
+                  <button onclick="event.stopPropagation(); sendReaction('${post.id}', 'toast', this)" class="text-xs flex items-center gap-1.5 bg-white/20 hover:bg-white/30 border border-white/20 px-2.5 py-1 rounded-full transition active:scale-90">
+                    🥂 <span>${post.reactions?.toast || 0}</span>
+                  </button>
+                  <button onclick="event.stopPropagation(); sendReaction('${post.id}', 'laugh', this)" class="text-xs flex items-center gap-1.5 bg-white/20 hover:bg-white/30 border border-white/20 px-2.5 py-1 rounded-full transition active:scale-90">
+                    ✨ <span>${post.reactions?.laugh || 0}</span>
+                  </button>
+                </div>
+                <span class="text-[10px] text-white/80 font-light italic">Tap to zoom</span>
+              </div>
+            </div>
+
+            <!-- Optional Caption -->
+            ${post.caption ? `
+            <div class="p-4 pt-3.5 border-t border-dusty/15">
+              <p class="text-xs text-navy/90 leading-relaxed font-light">${post.caption}</p>
+            </div>` : ''}
+          `;
+          container.appendChild(photoCard);
+        }
+      });
+    }
+
+    // ==========================================
+    // DATA FETCHING & APP LIFECYCLE
+    // ==========================================
     async function loadData() {
       try {
         const res = await fetch(GAS_ENDPOINT);
         const data = await res.json();
 
-        // 1. Settings
+        // Settings
         if (data.settings) {
           const s = data.settings;
           if (s.couple_names) {
@@ -340,7 +620,7 @@
           }
         }
 
-        // 2. Venues (with Time & Citation Bug Fix)
+        // Venues
         if (data.venues && data.venues.length > 0) {
           const venuesContainer = document.getElementById('venuesContainer');
           venuesContainer.innerHTML = '';
@@ -366,14 +646,13 @@
           });
         }
 
-        // 3. Posts
+        // Posts
         renderPosts(data.posts || []);
       } catch (err) {
         console.error("Error loading data from Google Sheet:", err);
       }
     }
 
-    // Navigation Switcher & Blur Handler
     function navigateTo(target) {
       const homeView = document.getElementById('view-home');
       const subpageWrapper = document.getElementById('subpage-wrapper');
@@ -385,7 +664,6 @@
         details: 'Itinerary & Venues'
       };
 
-      // Reset active state on dock icons
       ['upload', 'feed', 'details'].forEach(t => {
         const btn = document.getElementById(`dock-${t}`);
         if (btn) btn.classList.remove('text-dusty', 'border-b-2', 'border-dusty');
@@ -394,13 +672,11 @@
       if (target === 'home') {
         subpageWrapper.classList.add('hidden');
         homeView.classList.remove('hidden');
-        // Unblur background for home
         heroImg.className = "w-full h-full object-cover object-center bg-state-home";
         window.scrollTo(0, 0);
         return;
       }
 
-      // Blur background for subpages
       heroImg.className = "w-full h-full object-cover object-center bg-state-blurred";
       homeView.classList.add('hidden');
       subpageWrapper.classList.remove('hidden');
@@ -420,64 +696,6 @@
       if (target === 'feed') {
         loadData();
       }
-    }
-
-    function renderPosts(posts) {
-      const container = document.getElementById('postsContainer');
-      const loader = document.getElementById('postsLoader');
-      loader.classList.add('hidden');
-      container.innerHTML = "";
-
-      if (posts.length === 0) {
-        container.innerHTML = `<p class="text-center text-xs text-dusty py-6 drop-shadow">No moments shared yet. Be the first to snap a candid photo!</p>`;
-        return;
-      }
-
-      posts.forEach(post => {
-        const card = document.createElement('div');
-        card.className = "bg-cardBg/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden";
-
-        let mediaHtml = "";
-        if (post.mediaType === 'photo' && post.mediaUrl) {
-          mediaHtml = `<img src="${post.mediaUrl}" class="w-full h-80 object-cover" loading="lazy" />`;
-        } else if (post.mediaType === 'audio' && post.mediaUrl) {
-          // Extract file ID if a URL was stored, or use directly
-          const fileId = post.mediaUrl.includes('id=') 
-            ? post.mediaUrl.split('id=')[1] 
-            : post.mediaUrl;
-
-          mediaHtml = `
-            <div class="p-6 bg-beige/60 flex flex-col items-center justify-center border-b border-dusty/20 gap-3">
-              <button onclick="playAudioPost('${fileId}', this)" class="px-5 py-2.5 bg-navy text-beige rounded-full text-xs font-semibold shadow hover:bg-navy-light transition active:scale-95 flex items-center gap-2">
-                ▶️ Play Voice Toast
-              </button>
-              <audio controls class="hidden w-full max-w-xs mt-1"></audio>
-            </div>`;
-        }
-
-        card.innerHTML = `
-          <div class="p-4 pb-2 flex justify-between items-center border-b border-dusty/15">
-            <span class="font-serif italic font-semibold text-navy text-base">${post.guestName}</span>
-            <span class="text-[10px] text-gray-500">${new Date(post.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-          </div>
-          ${mediaHtml}
-          <div class="p-4">
-            ${post.caption ? `<p class="text-xs text-navy/90 leading-relaxed mb-3">${post.caption}</p>` : ''}
-            <div class="flex items-center gap-2 pt-2 border-t border-dusty/20">
-              <button onclick="sendReaction('${post.id}', 'heart', this)" class="text-xs flex items-center gap-1 bg-beige/80 px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
-                ❤️ <span>${post.reactions?.heart || 0}</span>
-              </button>
-              <button onclick="sendReaction('${post.id}', 'toast', this)" class="text-xs flex items-center gap-1 bg-beige/80 px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
-                🥂 <span>${post.reactions?.toast || 0}</span>
-              </button>
-              <button onclick="sendReaction('${post.id}', 'laugh', this)" class="text-xs flex items-center gap-1 bg-beige/80 px-3 py-1.5 rounded-full hover:bg-dusty/30 transition">
-                ✨ <span>${post.reactions?.laugh || 0}</span>
-              </button>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
     }
 
     function setMediaType(type) {
@@ -517,13 +735,11 @@
       if (!mediaRecorder || mediaRecorder.state === 'inactive') {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          
-          // Determine best supported audio MIME type
           let options = {};
           if (MediaRecorder.isTypeSupported('audio/webm')) {
             options = { mimeType: 'audio/webm' };
           } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
-            options = { mimeType: 'audio/mp4' }; // iPhone iOS Safari
+            options = { mimeType: 'audio/mp4' };
           }
 
           mediaRecorder = new MediaRecorder(stream, options);
@@ -556,48 +772,6 @@
         mediaRecorder.stop();
         status.innerText = "Voice message ready!";
         btn.classList.remove('bg-red-500', 'animate-pulse');
-      }
-    }
-
-    async function playAudioPost(audioFileId, btnElem) {
-      const audioTag = btnElem.parentElement.querySelector('audio');
-      if (audioTag.src && audioTag.src.startsWith('blob:')) {
-        if (audioTag.paused) {
-          audioTag.play();
-          btnElem.innerText = "⏸️ Pause";
-        } else {
-          audioTag.pause();
-          btnElem.innerText = "▶️ Play Voice Toast";
-        }
-        return;
-      }
-
-      btnElem.innerText = "⏳ Loading...";
-      try {
-        // Fetch raw audio base64 through our GAS proxy
-        const res = await fetch(`${GAS_ENDPOINT}?audioId=${audioFileId}`);
-        const base64Data = await res.text();
-        
-        // Convert base64 to playable blob
-        const byteCharacters = atob(base64Data);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'audio/webm' });
-        const playableUrl = URL.createObjectURL(blob);
-
-        audioTag.src = playableUrl;
-        audioTag.classList.remove('hidden');
-        audioTag.play();
-        btnElem.innerText = "⏸️ Pause";
-
-        audioTag.onended = () => {
-          btnElem.innerText = "▶️ Play Voice Toast";
-        };
-      } catch (err) {
-        btnElem.innerText = "⚠️ Failed to play";
       }
     }
 
